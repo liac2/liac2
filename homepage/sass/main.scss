@@ -45,12 +45,6 @@ nav {
 }
 
 // Hero
-.img-hero {
-    height: 673px !important;
-    width: auto !important;
-    border-radius: 28px;
-
-}
 .container-fluid {
     padding: 0 40px !important;    
 }
@@ -60,25 +54,46 @@ nav {
 .margin-section {
     margin-bottom: 100px;
 }
-.hero-1{
-    width: 530px;
+.img-hero {
+    height: auto !important;
+    width: 100% !important;
+    border-radius: 28px;
 }
 .hero{
+    justify-content: center;
     display: flex;
     flex-wrap: wrap;
+    gap: 30px;
 }
+.hero-1{
+    width: 530px;
+    align-self: center;
+}
+.hero-2{
+    flex: 1;
+}
+.hero-3{
+    flex: 1;
+}
+// Responsive: big img
 @media (max-width: 1861px) {
     .hero-2{
         display: none;
     }
+    .hero-3{
+        display: inline;
+        flex: 1;
+    }
 }
 
+// Responsive: small img
 @media (max-width: 1289px) {
     .hero-3{
         display: none;
     }
     .hero-2{
         display: inline;
+        flex: 1;
     }
 }
 
