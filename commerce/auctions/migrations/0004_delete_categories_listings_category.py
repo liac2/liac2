@@ -16,6 +16,6 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='listings',
             name='category',
-            field=models.CharField(choices=[('', 'Select category'), ('G', 'Games'), ('O', 'Other')], default='\x00', max_length=3),
+            field=models.CharField(choices=[('', 'Select category'), ('G', 'Games'), ('O', 'Other')], default='', max_length=3),
         ),
     ]

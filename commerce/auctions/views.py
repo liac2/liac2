@@ -37,7 +37,7 @@ def create(request):
                 title=listing["title"], 
                 description=listing["description"], 
                 starting_bid=listing["starting_bid"], 
-                url=listing["url"], 
+                url=listing["url"],
                 category=listing["category"]
             )
             new.save()

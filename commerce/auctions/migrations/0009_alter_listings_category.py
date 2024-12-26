@@ -13,6 +13,6 @@ class Migration(migrations.Migration):
         migrations.AlterField(
             model_name='listings',
             name='category',
-            field=models.CharField(choices=[('G', 'Games'), ('O', 'Other')], default='z', max_length=3),
+            field=models.CharField(choices=[('G', 'Games'), ('O', 'Other')], default='', max_length=3),
         ),
     ]
