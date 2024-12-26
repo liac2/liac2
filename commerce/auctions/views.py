@@ -4,23 +4,23 @@ from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render
 from django.urls import reverse
 
-from .models import User, Categories, Listings, Bids, Comments
+from .models import User, Listings
 from django import forms
 
-attributes = ["title", "description", "starting_bid", "url", "category"]
-categories = [("T", "Trex")]
-# for category in Categories.objects.all():
-#     categories.append((category.pk, category.category))
+
+categories = [("", "Select category"), ("G", "Games"), ("O", "Other")]
 
 class Create_New(forms.Form):
-    title = forms.CharField(label="Enter a title", max_length=30, min_length=10)
-    description = forms.CharField(label="Enter a description", max_length=50, min_length=10)
+    title = forms.CharField(label="Enter a title", max_length=30, min_length=5)
+    description = forms.CharField(label="Enter a description", max_length=50, min_length=5)
     starting_bid = forms.DecimalField(label="Enter a starting bid", min_value=1, max_value=999.99, decimal_places=2)
-    url = forms.URLField(initial="https://", help_text="This is a help_text")
+    url = forms.URLField(required=False)
     category = forms.ChoiceField(choices=categories)
 
 def index(request):
-    return render(request, "auctions/index.html")
+    return render(request, "auctions/index.html", {
+        'listings': Listings.objects.all()
+    })
 
 
 def create(request):
@@ -29,14 +29,20 @@ def create(request):
         if form.is_valid():
 
             # Get all data
-            listing = {}
-            for attribute in attributes:
-                listing[attribute] = form.cleaned_data[attribute]
+            listing = form.cleaned_data
             
             # Input data into database
-            
+            new = Listings(
+                user_id=request.user, 
+                title=listing["title"], 
+                description=listing["description"], 
+                starting_bid=listing["starting_bid"], 
+                url=listing["url"], 
+                category=listing["category"]
+            )
+            new.save()
 
-            return
+            return HttpResponseRedirect(reverse("index"))
             
         # Else: INVALID
         return render(request, "auctions/create.html", {
