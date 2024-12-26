@@ -10,7 +10,7 @@ class User(AbstractUser):
 
 # auction listings
 class Listings(models.Model):
-    user_id = models.ForeignKey(User, on_delete=models.CASCADE)
+    user_id = models.ForeignKey(User, on_delete=models.CASCADE, related_name="created_listings")
     title = models.CharField(max_length=30)
     description = models.CharField(max_length=50)
     starting_bid = models.DecimalField(max_digits=5, decimal_places=2)

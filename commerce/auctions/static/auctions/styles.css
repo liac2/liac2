@@ -9,3 +9,17 @@ img{
 .card{
     max-width: 20rem;
 }
+.parent{
+    display: flex;
+    gap: 1rem;
+    flex-wrap: wrap;
+}
+a,
+a:hover{
+    text-decoration: none;
+    color: black;
+}
+a:hover{
+    /* scale: 1.01; */
+    box-shadow: 5px, 5px, 10px, rgba(0,0,0,1);
+}

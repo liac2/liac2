@@ -23,6 +23,10 @@ def index(request):
     })
 
 
+def listing(request, username, listing_id):
+    pass
+
+
 def create(request):
     if request.method == "POST":
         form = Create_New(request.POST)
