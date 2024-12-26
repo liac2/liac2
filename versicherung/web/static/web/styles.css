@@ -1,0 +1,30 @@
+.hero{
+    display: flex;
+    justify-content: center;
+}
+.parent{
+    display: flex;
+    flex-direction: column;
+    max-width: 540px;
+    padding: 45px;
+}
+.btn{
+    width: 100%;
+    background-color: #ff5a00 !important;
+    color: white !important;
+    font-weight: bold !important;
+}
+
+h1{
+    font-size: 32px !important;
+}
+h2{
+    font-weight: 300 !important;
+    font-size: 1.4em !important;
+    line-height: 1.6em !important;
+}
+h3{
+    font-size: 18px;
+    font-weight: 400;
+    line-height: 27px;
+}
