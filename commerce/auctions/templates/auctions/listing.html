@@ -1,0 +1,74 @@
+{% extends "auctions/layout.html" %}
+
+{% block body %}
+
+    <div class="container">
+        <div class="row mb-3">
+            <div class="col-7">
+                {% if listing.url %}
+                    <img src="{{ listing.url }}" class="card-img-top listing_img" alt="Listing image">
+                {% else %}
+                    <img src="https://img.freepik.com/free-photo/simple-product-backdrop-with-shadow_53876-104160.jpg" class="card-img-top" alt="Default image">
+                {% endif %}
+            </div>
+            <div class="col-5">
+                <div class="row">
+                    <div class="col">
+                        <h1>
+                            {{ listing.title }}
+                        </h1>
+                    </div>
+                    {% if user.is_authenticated %}
+                    {% if user in listing.users.all %}
+                        <form action="{% url 'watchlist' %}" method="post">
+                            {% csrf_token %}
+                            <input type="hidden" name="watchlist" value="remove">
+                            <input type="hidden" name="listing_id" value="{{ listing.id }}">
+                            <button class="btn btn-watched btn-danger">
+                                <i class="bi bi-suit-heart"></i>
+                            </button>
+                        </form>
+                    {% else %}
+                        <form action="{% url 'watchlist' %}" method="post">
+                            {% csrf_token %}
+                            <input type="hidden" name="watchlist" value="add">
+                            <input type="hidden" name="listing_id" value="{{ listing.id }}">
+                            <button class="btn btn-watch btn-outline-danger">
+                                <i class="bi bi-suit-heart"></i>
+                            </button>
+                        </form>
+                    {% endif %}{% endif %}
+                    
+                </div>
+                <div class="row title">
+                    <div class="col">       
+                        <p>Category: {{ listing.get_category_display }}</p>
+                        <h3>Bids</h3>
+                        <p>Starting Bid: <strong>{{ listing.starting_bid }}$</strong></p>
+                        <form action="{% url 'index' %}{{ listing.user_id }}/{{ listing.id }}" method="post">
+                            {% csrf_token %}
+                            <label class="form-label" for="id_bid">Enter a bid price</label>
+                            {{ bid_form }}
+                            <button class="btn btn-outline-success">
+                                Make Bid
+                            </button>
+                        </form>
+                    </div>
+                    <div class="col-md-auto">
+                        <h3>
+                            User: {{ listing.user.username }}
+                        </h3>
+                    </div>
+                </div>
+            </div>
+           
+        </div>
+        <h3>Description</h3>
+        <p>
+            {{ listing.description }}
+        </p>
+
+
+    </div>
+    
+{% endblock %}

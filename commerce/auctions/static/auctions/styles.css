@@ -1,3 +1,25 @@
+/* Sajid */
+@import url("https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap");
+:root{
+  --ff: "Montserrat", sans-serif;
+  --colorp: #f9f9f9;
+  --colorp2: #fff;
+  --colora: #ffe537;
+  --colora2: #537fe7;
+  --colorbody: #1e1e1e;
+  --colors: #333;
+  --h1: bold 54px/60px var(--ff);
+  --h2: bold 36px/48px var(--ff);
+  --h3: bold 24px/36px var(--ff);
+  --links: 18px/18px var(--ff);
+  --p: 18px/30px var(--ff);
+  --p1: 24px/30px var(--ff);
+  --p2: 36px/48px var(--ff);
+  --subtext: 12px/20px var(--ff);
+  --transition: 0.3s ease-in-out;
+}
+/* Custom CSS */
+/* Index */
 body {
     padding: 10px;
 }
@@ -14,12 +36,40 @@ img{
     gap: 1rem;
     flex-wrap: wrap;
 }
-a,
-a:hover{
+a[class="card"]{
+    text-decoration: none;
+    color: black;
+    transition: var(--transition);
+    cursor: pointer;
+}
+a[class="card"]:hover{
+    scale: 1.01;
+    box-shadow: 0px 4px 4px #00000030, 0px 12px 12px #00000015;
+    transition: var(--transition);
     text-decoration: none;
     color: black;
 }
-a:hover{
-    /* scale: 1.01; */
-    box-shadow: 5px, 5px, 10px, rgba(0,0,0,1);
+
+/* Listing Page */
+.title{
+    justify-content: space-between;
+}
+.listing_img{
+    box-shadow: 0px 4px 4px #00000030, 0px 12px 12px #00000015;
+}
+
+.bi-suit-heart,
+.bi-suit-heart-fill {
+    font-size: 1.5rem; /* Größe des Icons */
+    color: red; /* Farbe des Herzens */
+}
+.btn-watch:hover .bi-suit-heart{
+    color: white;
+}
+.btn-watch,
+.btn-watched {
+    padding: 3px 6px;
+}
+.btn-watched > .bi-suit-heart{
+    color: white;
 }

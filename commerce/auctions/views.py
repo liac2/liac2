@@ -17,14 +17,45 @@ class Create_New(forms.Form):
     url = forms.URLField(required=False)
     category = forms.ChoiceField(choices=categories)
 
+class Bid(forms.Form):
+    bid = forms.DecimalField(min_value=1, max_value=999.99, decimal_places=2, widget=)
+    
+
 def index(request):
     return render(request, "auctions/index.html", {
         'listings': Listings.objects.all()
     })
 
+# - [ ] if authenticated: add/remove to watch list
+
+def watchlist(request):
+    if request.method == "POST":
+        form = request.POST["watchlist"]
+        listing_id = request.POST["listing_id"]
+        listing = Listings.objects.get(pk=listing_id)
+        user = User.objects.get(pk=request.user.id)
+
+        if form == "add":
+            user.watchlist.add(listing)
+        else:
+            user.watchlist.remove(listing)
+        return HttpResponseRedirect(reverse("listing", args=(listing.user.username, listing_id)))
+    else:
+        pass
+
 
 def listing(request, username, listing_id):
-    pass
+    if request.method == "POST":
+        # search bids on listing
+        listing = Listings.objects.get(pk=listing_id)
+        bids = listing.bids.all()
+        return HttpResponseRedirect(reverse("listing", args=(username, listing_id)))
+        
+
+    else:
+        return render(request, "auctions/listing.html", {
+            'listing': Listings.objects.get(pk=listing_id), 'bid_form': Bid()
+        })
 
 
 def create(request):
@@ -37,7 +68,7 @@ def create(request):
             
             # Input data into database
             new = Listings(
-                user_id=request.user, 
+                user=request.user, 
                 title=listing["title"], 
                 description=listing["description"], 
                 starting_bid=listing["starting_bid"], 
