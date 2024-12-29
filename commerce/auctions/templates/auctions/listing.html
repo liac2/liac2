@@ -14,9 +14,23 @@
             <div class="col-5">
                 <div class="row">
                     <div class="col">
-                        <h1>
-                            {{ listing.title }}
+                        <h1 class="mb-0 mt-5 price">
+                            ${{ highest_bid }}
                         </h1>
+                        <hr>
+                        <div class="row">
+                            <div class="col-9">
+                                <h2 class="mt-0 mb-0 title">
+                                    {{ listing.title }}
+                                </h2>
+                                <a class="user" href="{% url 'index' %}{{ listing.user.username }}">{{ listing.user.username }}</a>
+                            </div>
+                            <div class="col-3">
+                                <h3>
+                                </h3>
+                            </div>
+                        </div>
+                        
                     </div>
                     {% if user.is_authenticated %}
                     {% if user in listing.users.all %}
@@ -40,30 +54,57 @@
                     {% endif %}{% endif %}
                     
                 </div>
-                <div class="row title">
-                    <div class="col">       
-                        <p>Category: {{ listing.get_category_display }}</p>
-                        <h3>Bids</h3>
-                        <p>Starting Bid: <strong>{{ listing.starting_bid }}$</strong></p>
-                        <form action="{% url 'index' %}{{ listing.user_id }}/{{ listing.id }}" method="post">
-                            {% csrf_token %}
-                            <label class="form-label" for="id_bid">Enter a bid price</label>
-                            {{ bid_form }}
-                            <button class="btn btn-outline-success">
-                                Make Bid
-                            </button>
-                        </form>
+                <h3 class="mt-4">Bids</h3>
+
+                {% for bid in bids %}
+                    <div class="row">
+                        <div class="col-6">
+                            {{ bid.user.username }}
+                        </div>
+                        <div class="col-6">
+                            <strong>
+                                ${{ bid.price }}
+                            </strong>
+                        </div>
                     </div>
-                    <div class="col-md-auto">
-                        <h3>
-                            User: {{ listing.user.username }}
-                        </h3>
+                {% empty %}
+                <p>No bids</p>
+
+                {% endfor %}
+                
+                <div class="row mt-1 mb-3">
+                    <div class="col-6">
+                        Starting Bid
+                    </div>
+                    <div class="col-6">
+                        <strong>
+                            ${{ listing.starting_bid }}
+                        </strong>
                     </div>
                 </div>
+
+                <form action="{% url 'index' %}{{ listing.user_id }}/{{ listing.id }}" method="post">
+                    {% csrf_token %}
+                    <label class="form-label" for="id_bid">Enter a bid price</label>
+                    <div class="row">
+                        <div class="col-8">
+                            {{ bid_form.bid }}
+                        </div>
+                        <div class="col-4">
+                            <button class="btn btn-outline-success">
+                                Place Bid
+                            </button>
+                        </div>
+                    </div>
+                </form>
             </div>
            
         </div>
-        <h3>Description</h3>
+        
+        <p>Category: {{ listing.get_category_display }}</p>
+        
+
+        <h4>Description</h4>
         <p>
             {{ listing.description }}
         </p>

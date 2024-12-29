@@ -50,8 +50,24 @@ a[class="card"]:hover{
     color: black;
 }
 
+.card-price{
+    font-size: 2.5rem;
+}
+.card-title{
+    font-size: 1.5rem;
+}
+
 /* Listing Page */
+.price{
+    font-size: 4rem;
+}
 .title{
+    font-size: 2rem;
+}
+.user{
+    font-size: 1rem;
+}
+.category{
     justify-content: space-between;
 }
 .listing_img{

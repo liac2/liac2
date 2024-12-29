@@ -3,9 +3,12 @@ from django.db import IntegrityError
 from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render
 from django.urls import reverse
+from django.contrib.auth.decorators import login_required
 
-from .models import User, Listings
+from .models import User, Listings, Bids
 from django import forms
+
+from decimal import Decimal
 
 
 categories = [("", "Select category"), ("G", "Games"), ("O", "Other")]
@@ -18,16 +21,35 @@ class Create_New(forms.Form):
     category = forms.ChoiceField(choices=categories)
 
 class Bid(forms.Form):
-    bid = forms.DecimalField(min_value=1, max_value=999.99, decimal_places=2, widget=)
+    bid = forms.DecimalField(min_value=1, max_value=999.99, decimal_places=2, widget=forms.NumberInput(attrs={'class': 'form-control'}))
+
     
 
+# Custom function
+# def errror(request, msg):
+#     return render(request, "auctions/error.html", {
+#         'error_msg': msg
+#     })
+
 def index(request):
+    listings = list(Listings.objects.all())
+    results = []
+    
+    for index, listing in enumerate(listings):
+        bids = listing.bids.all().order_by('-price')
+
+        try:
+            price = bids[0].price
+        except IndexError:
+            price = listing.starting_bid
+
+        results.append((listing, price))
+
     return render(request, "auctions/index.html", {
-        'listings': Listings.objects.all()
+        'listings': listings, 'results': results
     })
 
-# - [ ] if authenticated: add/remove to watch list
-
+@login_required(login_url='login')
 def watchlist(request):
     if request.method == "POST":
         form = request.POST["watchlist"]
@@ -46,18 +68,55 @@ def watchlist(request):
 
 def listing(request, username, listing_id):
     if request.method == "POST":
+
         # search bids on listing
         listing = Listings.objects.get(pk=listing_id)
         bids = listing.bids.all()
-        return HttpResponseRedirect(reverse("listing", args=(username, listing_id)))
-        
+        form = Bid(request.POST)
 
+        if form.is_valid():
+            # TODO
+            """ For validations: https://getbootstrap.com/docs/5.3/forms/validation/#server-side"""
+
+            # Add bid to db
+            price = form.cleaned_data["bid"]
+            bid = Bids(
+                user=request.user,
+                listing=listing,
+                price=price
+            )
+            bid.save()
+            listing.bids.add(bid)       
+            return HttpResponseRedirect(reverse("listing", args=(username, listing_id)))
+            
+
+        else:
+            form.fields["bid"].widget.attrs["class"] += " is-invalid"
+            form.fields["bid"].widget.attrs["aria-describedby"] = "invalid_bid"
+            return render(request, "auctions/listing.html", {
+                'listing': listing, 'bid_form': form
+            }) 
+            
     else:
+
+        # Render listing with form min_price above all bids 
+        listing = Listings.objects.get(pk=listing_id)
+        bids = listing.bids.all().order_by('-price')
+        bid_form = Bid()
+
+        if len(bids) == 0:
+            price = listing.starting_bid
+        else:
+            price = bids[0].price
+
+        bid_form.fields["bid"].min_value = price + Decimal("0.01")
+        bid_form.fields['bid'].initial = price + Decimal("0.01")
+
         return render(request, "auctions/listing.html", {
-            'listing': Listings.objects.get(pk=listing_id), 'bid_form': Bid()
+            'listing': listing, 'bid_form': bid_form, 'bids': bids, 'highest_bid': price
         })
 
-
+@login_required(login_url='login')
 def create(request):
     if request.method == "POST":
         form = Create_New(request.POST)

@@ -5,7 +5,9 @@
 
     <div class="container">
         <div class="parent">
-            {% for listing in listings %}
+            {% for tuple in results %}
+            {% with tuple.0 as listing %}
+
             <a href="{% url 'index' %}{{ listing.user_id }}/{{ listing.id }}" class="card" target="_blank">
             <!-- <div class="card"> -->
                 {% if listing.url %}
@@ -14,19 +16,16 @@
                     <img src="https://img.freepik.com/free-photo/simple-product-backdrop-with-shadow_53876-104160.jpg" class="card-img-top" alt="Default image">
                 {% endif %}
                 <div class="card-body">
-                <h5 class="card-title"> {{ listing.title }}</h5>
-                <p class="card-text"> {{ listing.description }} </p>
+                <h6 class="card-price">${{ tuple.1 }}</h6>
+                <h5 class="card-title mt-3 mb-0">{{ listing.title }}</h5>
+                <p class="card-text mt-0"> {{ listing.description }} </p>
                 </div>
-                <ul class="list-group list-group-flush">
-                    <!-- TODO: actual, current price of bid -->
-                    <li class="list-group-item">Starting Bid: {{ listing.starting_bid }}</li>
-                </ul>
                 <div class="card-footer">
                     {{ listing.get_category_display }}
                 </div>
-            <!-- </div> -->
 
             </a>
+            {% endwith %}
             {% empty %}
                 <p>No Listings</p>
             {% endfor %}
