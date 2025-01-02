@@ -1,0 +1,27 @@
+{% extends "auctions/layout.html" %}
+
+{% block body %}
+    
+
+    <div class="container mb-3">
+        <h2>
+            {{ title }}
+        </h2>
+        <div class="parent">
+            <div class="list-group list-categories">
+
+
+            {% for item in categories %}
+                <a href="{% url 'category' item.0 %}" class="list-group-item list-group-item-action">{{ item.0 }}
+                    <span class="badge text-bg-primary">{{ item.1 }}</span>
+                </a>
+            {% empty %}
+                <p>No Categories</p>
+            {% endfor %}
+            
+          </div>
+
+        </div>
+    </div>
+    
+{% endblock %}

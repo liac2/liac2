@@ -1,14 +1,15 @@
 {% extends "auctions/layout.html" %}
 
 {% block body %}
-    <h2>Active Listings</h2>
-
     <div class="container">
+        <h2>
+            {{ title }}
+        </h2>
         <div class="parent">
             {% for tuple in results %}
             {% with tuple.0 as listing %}
 
-            <a href="{% url 'index' %}{{ listing.user_id }}/{{ listing.id }}" class="card" target="_blank">
+            <a href="{% url 'listing' listing.user.username listing.id %}" class="card">
             <!-- <div class="card"> -->
                 {% if listing.url %}
                     <img src="{{ listing.url }}" class="card-img-top" alt="Listing image">
@@ -21,7 +22,7 @@
                 <p class="card-text mt-0"> {{ listing.description }} </p>
                 </div>
                 <div class="card-footer">
-                    {{ listing.get_category_display }}
+                    {{ listing.category.name }}
                 </div>
 
             </a>
