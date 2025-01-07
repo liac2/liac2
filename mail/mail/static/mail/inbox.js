@@ -1,4 +1,4 @@
-document.addEventListener('DOMContentLoaded', function() {
+document.addEventListener('DOMContentLoaded', () => {
 
   // Use buttons to toggle between views
   document.querySelector('#inbox').addEventListener('click', () => load_mailbox('inbox'));
@@ -63,21 +63,40 @@ function load_mailbox(mailbox) {
   document.querySelector('#compose-view').style.display = 'none';
 
   // Show the mailbox name
-  document.querySelector('#emails-view').innerHTML = `<h3>${mailbox.charAt(0).toUpperCase() + mailbox.slice(1)}</h3>`;
+  let old = document.querySelector('#emails-view');
+  old.innerHTML = '';
+  old.innerHTML += `<h3>${mailbox.charAt(0).toUpperCase() + mailbox.slice(1)}</h3>`;
 
   // Inbox
   if (mailbox === 'inbox') {
     fetch('/emails/inbox')
     .then(response => response.json())
     .then(emails => {
-        // Print emails
-        console.log(emails);
+      console.log(emails);
 
+      // Create html for email
+      for (const mail of emails) {
+        let entry = document.createElement('a'); 
+        if (mail.read === true) {
+          entry.className = 'list-group-item list-group-item-action list-group-item-light';
+        }
+        else {
+          entry.className = 'list-group-item list-group-item-action';
+        }
+        entry.href = '#';
+        entry.ariaCurrent = 'true';
+        entry.innerHTML = `<div class="d-flex w-100 justify-content-between">
+              <h5 class="mb-1">${mail.subject}</h5>
+              <small>${mail.timestamp}</small>
+              </div>
+              <p class="mb-1">${mail.sender}</p>`;
+        old.append(entry);
+      }
     });
   }
 
   // Sent
-  if (mailbox === 'sent') {
+  else if (mailbox === 'sent') {
     fetch('/emails/sent')
     .then(response => response.json())
     .then(emails => {
@@ -88,7 +107,7 @@ function load_mailbox(mailbox) {
   }
 
   // Archive
-  if (mailbox === 'archive') {
+  else if (mailbox === 'archive') {
     fetch('/emails/archive')
     .then(response => response.json())
     .then(emails => {
