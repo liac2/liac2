@@ -67,53 +67,50 @@ function load_mailbox(mailbox) {
   old.innerHTML = '';
   old.innerHTML += `<h3>${mailbox.charAt(0).toUpperCase() + mailbox.slice(1)}</h3>`;
 
-  // Inbox
-  if (mailbox === 'inbox') {
-    fetch('/emails/inbox')
-    .then(response => response.json())
-    .then(emails => {
-      console.log(emails);
+  // Load emails on inbox, sent, archive 
+  fetch(`/emails/${mailbox}`)
+  .then(response => response.json())
+  .then(emails => {
+    console.log(emails);
 
-      // Create html for email
-      for (const mail of emails) {
-        let entry = document.createElement('a'); 
-        if (mail.read === true) {
-          entry.className = 'list-group-item list-group-item-action list-group-item-light';
-        }
-        else {
-          entry.className = 'list-group-item list-group-item-action';
-        }
-        entry.href = '#';
-        entry.ariaCurrent = 'true';
-        entry.innerHTML = `<div class="d-flex w-100 justify-content-between">
-              <h5 class="mb-1">${mail.subject}</h5>
-              <small>${mail.timestamp}</small>
-              </div>
-              <p class="mb-1">${mail.sender}</p>`;
-        old.append(entry);
+    // Create html for email
+    for (const mail of emails) {
+      let entry = document.createElement('a'); 
+      if (mail.read === true) {
+        entry.className = 'list-group-item list-group-item-action list-group-item-light';
       }
+      else {
+        entry.className = 'list-group-item list-group-item-action';
+      }
+      entry.dataset.id = mail.id;
+      entry.href = '#';
+      entry.ariaCurrent = 'true';
+      entry.innerHTML = `<div class="d-flex w-100 justify-content-between">
+            <h5 class="mb-1">${mail.subject}</h5>
+            <small>${mail.timestamp}</small>
+            </div>
+            <p class="mb-1">${mail.sender}</p>`;
+      old.append(entry);
+    }
+  });
+
+  // View single email
+  old.childNodes.forEach(mail => {
+    mail.addEventListener('click', event => {
+
+      // Hide other emails
+      old.innerHTML = '';
+      
+      // View single email 
+      fetch(`/emails/${this.dataset.id}`)
+      .then(response => response.json())
+      .then(email => {
+
+          // sender, recipients, subject, timestamp, and body.
+          div.innerHTML = ``
+        });
+      
+
     });
-  }
-
-  // Sent
-  else if (mailbox === 'sent') {
-    fetch('/emails/sent')
-    .then(response => response.json())
-    .then(emails => {
-        // Print emails
-        console.log(emails);
-
-    });
-  }
-
-  // Archive
-  else if (mailbox === 'archive') {
-    fetch('/emails/archive')
-    .then(response => response.json())
-    .then(emails => {
-        // Print emails
-        console.log(emails);
-
-    });
-  }
+  });
 }
