@@ -49,6 +49,9 @@ function compose_email() {
   // Show compose view and hide other views
   document.querySelector('#emails-view').style.display = 'none';
   document.querySelector('#compose-view').style.display = 'block';
+  document.querySelectorAll('.single-email-view').forEach(div =>{
+    div.remove();
+  });
 
   // Clear out composition fields
   document.querySelector('#compose-recipients').value = '';
@@ -61,6 +64,9 @@ function load_mailbox(mailbox) {
   // Show the mailbox and hide other views
   document.querySelector('#emails-view').style.display = 'block';
   document.querySelector('#compose-view').style.display = 'none';
+  document.querySelectorAll('.single-email-view').forEach(div => {
+    div.remove();
+  });
 
   // Show the mailbox name
   let old = document.querySelector('#emails-view');
@@ -77,7 +83,7 @@ function load_mailbox(mailbox) {
     for (const mail of emails) {
       let entry = document.createElement('a'); 
       if (mail.read === true) {
-        entry.className = 'list-group-item list-group-item-action list-group-item-light';
+        entry.className = 'list-group-item list-group-item-action list-group-item-light bg-light';
       }
       else {
         entry.className = 'list-group-item list-group-item-action';
@@ -90,27 +96,47 @@ function load_mailbox(mailbox) {
             <small>${mail.timestamp}</small>
             </div>
             <p class="mb-1">${mail.sender}</p>`;
+
+      // View single email
+      entry.addEventListener('click', event => {
+        document.querySelector('#emails-view').style.display = 'none';
+
+        // sender, recipients, subject, timestamp, and body.
+        let view = document.createElement('div');
+        view.className = 'single-email-view';
+        view.innerHTML = `
+        <div class="row">
+          <div class="col-10">
+            <h1>${mail.subject}</h1>
+            <h2 class="h5">From: ${mail.sender}</h2>
+            <h2 class="h5">To: ${mail.recipients}</h2>
+          </div>  
+          <div class="col-2">
+            <div class="row d-flex justify-content-end">
+              <small class="text-end">${mail.timestamp}</small>
+            </div> 
+            <div class="row d-flex justify-content-end">
+              <button type="button" class="archive btn btn-secondary">
+                <i class="bi bi-archive"></i>
+              </button>
+            </div> 
+          </div>  
+        </div>
+          
+        <hr>
+        <p>${mail.body}</p>`;
+        document.querySelector('.container').append(view);
+
+        // Mark mail on server as read
+        fetch(`/emails/${mail.id}`, {
+          method: 'PUT',
+          body: JSON.stringify({
+              read: true
+          })
+        })
+      });
+
       old.append(entry);
     }
-  });
-
-  // View single email
-  old.childNodes.forEach(mail => {
-    mail.addEventListener('click', event => {
-
-      // Hide other emails
-      old.innerHTML = '';
-      
-      // View single email 
-      fetch(`/emails/${this.dataset.id}`)
-      .then(response => response.json())
-      .then(email => {
-
-          // sender, recipients, subject, timestamp, and body.
-          div.innerHTML = ``
-        });
-      
-
-    });
   });
 }
