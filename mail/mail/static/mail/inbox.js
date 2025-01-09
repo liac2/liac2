@@ -105,7 +105,7 @@ function load_mailbox(mailbox) {
           element.remove();
         });
 
-        // sender, recipients, subject, timestamp, and body.
+        // render components of mail
         let view = document.createElement('div');
         view.className = 'single-email-view';
         view.innerHTML = `
@@ -132,6 +132,14 @@ function load_mailbox(mailbox) {
 
         document.querySelector('.container').append(view);
 
+        // Mark mail on server as read
+        fetch(`/emails/${mail.id}`, {
+          method: 'PUT',
+          body: JSON.stringify({
+              read: true
+          })
+        });
+
         // Archive btn
         document.querySelector('#archive').onclick = () => {
           
@@ -151,18 +159,9 @@ function load_mailbox(mailbox) {
             .then(() => {
               load_mailbox('inbox');
             });
-
           });
-
         };
 
-        // Mark mail on server as read
-        fetch(`/emails/${mail.id}`, {
-          method: 'PUT',
-          body: JSON.stringify({
-              read: true
-          })
-        });
       });
 
       old.append(entry);
