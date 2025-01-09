@@ -80,7 +80,7 @@ function load_mailbox(mailbox) {
     console.log(emails);
 
     // Create html for email
-    for (const mail of emails) {
+    for (let mail of emails) {
       let entry = document.createElement('a'); 
       if (mail.read === true) {
         entry.className = 'list-group-item list-group-item-action list-group-item-light bg-light';
@@ -99,7 +99,12 @@ function load_mailbox(mailbox) {
 
       // View single email
       entry.addEventListener('click', event => {
+
+        // Setup page
         document.querySelector('#emails-view').style.display = 'none';
+        document.querySelectorAll('.single-email-view').forEach(element =>{
+          element.remove();
+        });
 
         // sender, recipients, subject, timestamp, and body.
         let view = document.createElement('div');
@@ -116,7 +121,7 @@ function load_mailbox(mailbox) {
               <small class="text-end">${mail.timestamp}</small>
             </div> 
             <div class="row d-flex justify-content-end">
-              <button type="button" class="archive btn btn-secondary">
+              <button type="button" id="archive" class="btn btn-secondary">
                 <i class="bi bi-archive"></i>
               </button>
             </div> 
@@ -125,7 +130,36 @@ function load_mailbox(mailbox) {
           
         <hr>
         <p>${mail.body}</p>`;
+
         document.querySelector('.container').append(view);
+
+        // Archive btn
+        document.querySelector('#archive').onclick = btn => {
+          
+          console.log('btn');
+          // Get current archived state
+          fetch(`/emails/${mail.id}`)
+          .then(response => response.json())
+          .then(new => {
+
+            // If archived
+            if (new.archived === false) {
+              fetch(`/emails/${mail.id}`, {
+                method: 'PUT',
+                body: JSON.stringify({
+                    archived: true
+                })
+              });
+            } else {
+              fetch(`/emails/${mail.id}`, {
+                method: 'PUT',
+                body: JSON.stringify({
+                    archived: false
+                })
+              });
+            }
+          });
+        };
 
         // Mark mail on server as read
         fetch(`/emails/${mail.id}`, {
@@ -133,7 +167,7 @@ function load_mailbox(mailbox) {
           body: JSON.stringify({
               read: true
           })
-        })
+        });
       });
 
       old.append(entry);
