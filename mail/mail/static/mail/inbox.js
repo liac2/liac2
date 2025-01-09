@@ -17,7 +17,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Prepare data
     data.recipients.split(' ').join(',');
-    console.log(data);
 
     // Send mail to server
     fetch('/emails', {
@@ -30,7 +29,6 @@ document.addEventListener('DOMContentLoaded', () => {
     })
     .then(response => response.json())
     .then(result => {
-        console.log(result);
     });
 
     // Load 'sent' view
@@ -77,6 +75,7 @@ function load_mailbox(mailbox) {
   fetch(`/emails/${mailbox}`)
   .then(response => response.json())
   .then(emails => {
+
     console.log(emails);
 
     // Create html for email
@@ -134,30 +133,27 @@ function load_mailbox(mailbox) {
         document.querySelector('.container').append(view);
 
         // Archive btn
-        document.querySelector('#archive').onclick = btn => {
+        document.querySelector('#archive').onclick = () => {
           
           // Get current archived state
           fetch(`/emails/${mail.id}`)
           .then(response => response.json())
           .then(new_mail => {
 
-            // If archived
-            if (new_mail.archived === false) {
-              fetch(`/emails/${mail.id}`, {
-                method: 'PUT',
-                body: JSON.stringify({
-                    archived: true
-                })
-              });
-            } else {
-              fetch(`/emails/${mail.id}`, {
-                method: 'PUT',
-                body: JSON.stringify({
-                    archived: false
-                })
-              });
-            }
+            // Set opposite state
+            fetch(`/emails/${mail.id}`, {
+              method: 'PUT',
+              body: JSON.stringify({
+                  archived: !new_mail.archived
+              })
+            })
+            // Load inbox
+            .then(() => {
+              load_mailbox('inbox');
+            });
+
           });
+
         };
 
         // Mark mail on server as read
