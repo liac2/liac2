@@ -136,14 +136,13 @@ function load_mailbox(mailbox) {
         // Archive btn
         document.querySelector('#archive').onclick = btn => {
           
-          console.log('btn');
           // Get current archived state
           fetch(`/emails/${mail.id}`)
           .then(response => response.json())
-          .then(new => {
+          .then(new_mail => {
 
             // If archived
-            if (new.archived === false) {
+            if (new_mail.archived === false) {
               fetch(`/emails/${mail.id}`, {
                 method: 'PUT',
                 body: JSON.stringify({
