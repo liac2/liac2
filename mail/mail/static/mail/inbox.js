@@ -4,7 +4,7 @@ document.addEventListener('DOMContentLoaded', () => {
   document.querySelector('#inbox').addEventListener('click', () => load_mailbox('inbox'));
   document.querySelector('#sent').addEventListener('click', () => load_mailbox('sent'));
   document.querySelector('#archived').addEventListener('click', () => load_mailbox('archive'));
-  document.querySelector('#compose').addEventListener('click', compose_email);
+  document.querySelector('#compose').addEventListener('click', () => compose_email('', '', ''));
 
   // Send mail
   document.querySelector('#compose-form').onsubmit = () => {
@@ -42,7 +42,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
 });
 
-function compose_email() {
+function compose_email(recipients, subject, body) {
 
   // Show compose view and hide other views
   document.querySelector('#emails-view').style.display = 'none';
@@ -52,9 +52,9 @@ function compose_email() {
   });
 
   // Clear out composition fields
-  document.querySelector('#compose-recipients').value = '';
-  document.querySelector('#compose-subject').value = '';
-  document.querySelector('#compose-body').value = '';
+  document.querySelector('#compose-recipients').value = recipients;
+  document.querySelector('#compose-subject').value = subject;
+  document.querySelector('#compose-body').value = body;
 }
 
 function load_mailbox(mailbox) {
@@ -115,15 +115,18 @@ function load_mailbox(mailbox) {
             <h2 class="h5">From: ${mail.sender}</h2>
             <h2 class="h5">To: ${mail.recipients}</h2>
           </div>  
-          <div class="col-2">
-            <div class="row d-flex justify-content-end">
-              <small class="text-end">${mail.timestamp}</small>
-            </div> 
-            <div class="row d-flex justify-content-end">
+          <div class="col-2 sidebar">
+            <div class="header-sidebar">
+              <small class="">${mail.timestamp}</small>
               <button type="button" id="archive" class="btn btn-secondary">
                 <i class="bi bi-archive"></i>
               </button>
             </div> 
+             <div class="">
+              <button type="button" id="reply" class="btn btn-secondary">
+              <i class="bi bi-reply"></i>Reply
+              </button>
+            </div>
           </div>  
         </div>
           
@@ -140,6 +143,18 @@ function load_mailbox(mailbox) {
           })
         });
 
+        // Reply btn
+        document.querySelector('#reply').onclick = () => {
+          let subject = '';
+          if (!mail.subject.startsWith('Re: ')) {
+            subject = 'Re: ' + mail.subject;
+          } else {
+            subject = mail.subject;
+          }
+          let body = `On ${mail.timestamp} ${mail.sender} wrote:\n${mail.body}\n`;
+          compose_email(mail.sender, subject, body);
+        };
+        
         // Archive btn
         document.querySelector('#archive').onclick = () => {
           
