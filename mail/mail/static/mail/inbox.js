@@ -29,10 +29,10 @@ document.addEventListener('DOMContentLoaded', () => {
     })
     .then(response => response.json())
     .then(result => {
+    })
+    .then(() => {
+      load_mailbox('sent');
     });
-
-    // Load 'sent' view
-    load_mailbox('sent');
 
     return false;
   };
