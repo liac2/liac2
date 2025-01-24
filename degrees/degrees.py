@@ -92,6 +92,7 @@ def shortest_path(source, target):
     If no possible path, returns None.
     """
     p = Path(start=source, goal=target)
+    return p.solve()
 
 
 
@@ -108,27 +109,26 @@ class Path():
         start = Node(state=self.start, parent=None, action=None)
         frontier = QueueFrontier()
         frontier.add(start)
+        self.solution = []
 
         # Loop until solution found
         while True:
             if frontier.empty():
-                raise Exception("no solution")
+                return None
             
             node = frontier.remove()
 
             self.num_explored += 1
 
             # If solution found
-            # TODO: Output solution
             if node.state == self.goal:
                 while node.parent != None:
-                    solution = []
                     s = (node.action, node.state)
-                    solution.append(s)
+                    self.solution.append(s)
                     node = node.parent
                     
-                solution.reverse()
-                return solution
+                self.solution.reverse()
+                return self.solution
             
             # Find new nodes
             neighbors = neighbors_for_person(node.state)
