@@ -116,32 +116,31 @@ class Path():
             
             node = frontier.remove()
 
-            # If node not explored
-            # TODO: only check for explored states
-            if node not in self.explored:
+            self.num_explored += 1
 
-                self.num_explored += 1
+            # If solution found
+            # TODO: Output solution
+            if node.state == self.goal:
+                while node.parent != None:
+                    solution = []
+                    s = (node.action, node.state)
+                    solution.append(s)
+                    node = node.parent
+                    
+                solution.reverse()
+                return solution
+            
+            # Find new nodes
+            neighbors = neighbors_for_person(node.state)
+            for p in neighbors:
 
-                # If solution found
-                # TODO: Output solution
-                if node.state == self.goal:
-                    while node.parent != None:
-                        solution = []
-                        s = (node.action, node.state)
-                        solution.append(s)
-                        node = node.parent
-                        
-                    solution.reverse()
-                    return solution
-                
-                # Find new nodes
-                neighbors = neighbors_for_person(node.state)
-                for p in neighbors:
+                # If node not explored
+                if p[1] not in self.explored and not frontier.contains_state(p[1]):
                     n = Node(state=p[1], parent=node, action=p[0])
                     frontier.add(n)
 
-                # Add current node to explored set
-                self.explored.add(node)
+            # Add current node to explored set
+            self.explored.add(node.state)
 
 
 
