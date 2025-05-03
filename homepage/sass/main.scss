@@ -4,6 +4,7 @@ $subtitle: 32px;
 // custom variables
 $primary: #FF8000;
 $h1-font-size: 72px;
+$h2-font-size: 72px;
 
 
 
@@ -46,21 +47,117 @@ nav {
 
 // Hero
 .img-hero {
-    height: 673px !important;
-    width: auto !important;
+    width: 100%;
+    height: auto;
+    // height: 673px !important;
+    // width: auto !important;
     border-radius: 28px;
+}
 
-}
-.container-fluid {
-    padding: 0 40px !important;    
-}
 .rounded {
     border-radius: $border-radius-2xl !important;
 }
 .margin-section {
-    margin-bottom: 100px;
+    margin-bottom: 150px;
+}
+
+.hero{
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    justify-content: center;
+    padding-top: 10px;
+    // padding: 0;
+}
+.hero-1{
+    width: 530px;
+    height: 319.17;
+    align-self: center;
 }
 
 
+// LARGE 
+@media (max-width: 1861px) {
+    .hero-2{
+        display: none;
+    }
+}
+
+// MEDIUM
+@media (max-width: 1289px) {
+    .hero-3{
+        display: none;
+    }
+    .hero-2{
+        display: inline;
+    }
+}
+
+// SMALL
+@media (max-width: 1200px) {
+    .hero{
+        flex-direction: column;
+        gap: 50px;
+    }
+    .hero-1{
+        margin-top: 30px;
+        display: flex;
+        flex-direction: column;
+    }
+    .hero-1 > a {
+        align-self: flex-start;
+    }
+    .hero-2{
+        width: auto;
+        height: 673px;
+        align-self: center;
+    }
+}
+
+// Über Uns
+
+// Mitglieder
+// .mitglied-img{
+//     // width: 50% !important;
+//     // height: 300px !important;
+//     // object-fit: cover;
+// }
+// .mitglieder{
+//     width: 50% !important;
+    // height: 300px !important;
+    // object-fit: cover;
+// }
+
 // Termine
+.card{
+    width: 18rem;
+}
+@include media-breakpoint-down(md) {
+    .termine{
+        display: flex;
+        justify-content: center !important;
+    }
+    .col{
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+    }
+    .card{
+        width: 80%;
+    }
+
+}
+
+.link-none {
+    text-decoration: none;
+    color: black;
+}
+.link-none:hover {
+    color: black !important;
+}
+
+// Footer
+.icon {
+    font-size: 2rem;
+}
 

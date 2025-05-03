@@ -224,10 +224,10 @@ h1, .h1 {
       font-size: 4.5rem; } }
 
 h2, .h2 {
-  font-size: calc(1.325rem + 0.9vw); }
+  font-size: calc(1.575rem + 3.9vw); }
   @media (min-width: 1200px) {
     h2, .h2 {
-      font-size: 2rem; } }
+      font-size: 4.5rem; } }
 
 h3, .h3 {
   font-size: calc(1.3rem + 0.6vw); }
@@ -7019,7 +7019,7 @@ textarea.form-control-lg {
   font-size: calc(1.575rem + 3.9vw) !important; }
 
 .fs-2 {
-  font-size: calc(1.325rem + 0.9vw) !important; }
+  font-size: calc(1.575rem + 3.9vw) !important; }
 
 .fs-3 {
   font-size: calc(1.3rem + 0.6vw) !important; }
@@ -10413,7 +10413,7 @@ textarea.form-control-lg {
     font-size: 4.5rem !important; }
 
   .fs-2 {
-    font-size: 2rem !important; }
+    font-size: 4.5rem !important; }
 
   .fs-3 {
     font-size: 1.75rem !important; }
@@ -10468,17 +10468,77 @@ nav {
   font-size: 20px; }
 
 .img-hero {
-  height: 673px !important;
-  width: auto !important;
+  width: 100%;
+  height: auto;
   border-radius: 28px; }
-
-.container-fluid, .container-sm, .container-md, .container-lg, .container-xl, .container-xxl {
-  padding: 0 40px !important; }
 
 .rounded {
   border-radius: 2rem !important; }
 
 .margin-section {
-  margin-bottom: 100px; }
+  margin-bottom: 150px; }
+
+.hero {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  justify-content: center;
+  padding-top: 10px; }
+
+.hero-1 {
+  width: 530px;
+  height: 319.17;
+  align-self: center; }
+
+@media (max-width: 1861px) {
+  .hero-2 {
+    display: none; } }
+@media (max-width: 1289px) {
+  .hero-3 {
+    display: none; }
+
+  .hero-2 {
+    display: inline; } }
+@media (max-width: 1200px) {
+  .hero {
+    flex-direction: column;
+    gap: 50px; }
+
+  .hero-1 {
+    margin-top: 30px;
+    display: flex;
+    flex-direction: column; }
+
+  .hero-1 > a {
+    align-self: flex-start; }
+
+  .hero-2 {
+    width: auto;
+    height: 673px;
+    align-self: center; } }
+.card {
+  width: 18rem; }
+
+@media (max-width: 767.98px) {
+  .termine {
+    display: flex;
+    justify-content: center !important; }
+
+  .col {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center; }
+
+  .card {
+    width: 80%; } }
+.link-none {
+  text-decoration: none;
+  color: black; }
+
+.link-none:hover {
+  color: black !important; }
+
+.icon {
+  font-size: 2rem; }
 
 /*# sourceMappingURL=styles.css.map */
